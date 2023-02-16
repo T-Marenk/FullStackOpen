@@ -24,9 +24,6 @@ const Statistics = ({good, neutral, bad}) => {
 
     const averageCalculator = () => {
         const all = allCalculator()
-        if (all === 0) {
-            return 0
-        }
         const sum = good - bad
         const average = sum/all
         return average
@@ -34,12 +31,18 @@ const Statistics = ({good, neutral, bad}) => {
 
     const positiveCalculator = () => {
         const all = allCalculator()
-        if (all === 0) {
-            return '0 %'
-        }
         const percentage = (good/all)*100
         const percentagestring = percentage.toString() + ' %'
         return percentagestring
+    }
+
+    if (allCalculator() === 0) {
+        return (
+            <div>
+                <Title title={ 'Statistics' }/>
+                <p>No feedback given</p>
+            </div>
+        )
     }
 
     return (
