@@ -8,6 +8,18 @@ const Button = (props) => {
     )
 }
 
+const MostVoted = ({ votes, anecdotes }) => {
+    const index = votes.indexOf(Math.max(...votes))
+
+    return (
+        <div>
+            <p>{ anecdotes[index] }</p>
+            <p>With { votes[index] } votes</p>
+        </div>
+    )
+
+
+}
 const App = () => {
     const anecdotes = [
         'If it hurts, do it more often.',
@@ -39,10 +51,13 @@ const App = () => {
 
     return (
         <div>
+            <h1>Anecdote of the day</h1>
             <p>{anecdotes[selected]}</p>
             <p>Has { votes[selected] } votes</p>
             <Button clickHandler={ clickHandleVote } text={ 'vote' }/>
             <Button clickHandler={ clickHandleNext } text={ 'Next anecdote' }/>
+            <h1>Anecdote with the most votes</h1>
+            <MostVoted anecdotes={ anecdotes } votes={ votes } />
         </div>
     )
 }
