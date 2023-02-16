@@ -39,7 +39,6 @@ const Statistics = ({good, neutral, bad}) => {
     if (allCalculator() === 0) {
         return (
             <div>
-                <Title title={ 'Statistics' }/>
                 <p>No feedback given</p>
             </div>
         )
@@ -47,18 +46,17 @@ const Statistics = ({good, neutral, bad}) => {
 
     return (
         <div>
-            <Title title={ 'Statistics' } />
-            <Stats text={ 'Good' } value={ good } />
-            <Stats text={ 'Neutral' } value={ neutral } />
-            <Stats text={ 'Bad' } value={ bad } />
-            <Stats text={ 'All' } value={ allCalculator() } />
-            <Stats text={ 'Average' } value={ averageCalculator() } />
-            <Stats text={ 'Positive' } value={ positiveCalculator() } />
+            <StatisticsLine text={ 'Good' } value={ good } />
+            <StatisticsLine text={ 'Neutral' } value={ neutral } />
+            <StatisticsLine text={ 'Bad' } value={ bad } />
+            <StatisticsLine text={ 'All' } value={ allCalculator() } />
+            <StatisticsLine text={ 'Average' } value={ averageCalculator() } />
+            <StatisticsLine text={ 'Positive' } value={ positiveCalculator() } />
         </div>
     )
 }
 
-const Stats = (props) => {
+const StatisticsLine = (props) => {
     return (
         <p>{ props.text }: { props.value }</p>
     )
@@ -82,6 +80,7 @@ const App = () => {
             <Button clickHandler={handleClick(setGood, good, 'good')} text={'good'} />
             <Button clickHandler={handleClick(setNeutral, neutral, 'neutral')} text={'neutral'} />
             <Button clickHandler={handleClick(setBad, bad, 'bad')} text={'bad'} />
+            <Title title={ 'Statistics' }/>
             <Statistics good={ good } neutral={ neutral } bad={ bad }/>
         </div>
     )
