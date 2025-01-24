@@ -3,16 +3,18 @@ import personService from './services/persons'
 import Persons from './components/Persons'
 import AddPerson from './components/AddPerson'
 import Filter from './components/Filter'
-
+import Notification from './components/Message'
+import ErrorNotification from './components/ErrorMessage'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-
   const [filter, setFilter] = useState('')
-
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
   }
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const personsToShow = filter === ''
     ? persons
@@ -44,6 +46,12 @@ const App = () => {
         .create(personObject)
           .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setNotificationMessage(
+            `${personObject.name} has been added`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
@@ -65,8 +73,13 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-              alert(`Person ${person.name} has already been deleted`)
-              setPersons(persons.filter(p => p.id !== id))
+              setErrorMessage(
+                `Person ${person.name} has already been deleted`                
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+              setPersons(persons.filter(p => p.id !== person.id))
             }
           )
     }
@@ -77,12 +90,21 @@ const App = () => {
       personService
         .erase(id)
           .then(returnedData => {
-           setPersons(persons.filter(p => p.id !== id))
+           // setPersons(persons.filter(p => p.id !== id))
+           setNotificationMessage(
+             `${name} has successfully been deleted`
+           )
+           setTimeout(() => {
+             setNotificationMessage(null)
+           }, 5000)
         })
         .catch(error => {
-          alert(
+          setErrorMessage(
             `the person ${name} was already deleted from the server`
           )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -100,6 +122,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage}/>
+      <ErrorNotification message={errorMessage}/>
 
       <Filter 
         filter={filter} 

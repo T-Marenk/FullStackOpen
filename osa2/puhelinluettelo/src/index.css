@@ -1,0 +1,19 @@
+.error{
+  color: red;
+  background: lightyellow;
+  font-size: 16px;
+  border-style: solid;
+  border-radius: 8px;
+  padding: 7px;
+  margin-bottom: 5px;
+}
+
+.notification{
+  color: green;
+  background: lightyellow;
+  font-size: 16px;
+  border-style: solid;
+  border-radius: 8px;
+  padding: 7px;
+  margin-bottom: 5px;
+}
