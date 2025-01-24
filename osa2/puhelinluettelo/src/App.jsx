@@ -51,6 +51,24 @@ const App = () => {
       })
   }
 
+  const deletePerson = (id, name) => {
+    console.log(`pressed button to delete ${id}`)
+
+    if (confirm(`Delete ${name}?`)) {
+      personService
+        .erase(id)
+          .then(returnedData => {
+            console.log(returnedData)
+           setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          alert(
+            `the person ${name} was already deleted from the server`
+          )
+        })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -81,7 +99,10 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons persons={persons} personsToShow={personsToShow} />
+      <Persons
+        persons={persons}
+        personsToShow={personsToShow}
+        deletePerson={deletePerson} />
     </div>
   )
 
