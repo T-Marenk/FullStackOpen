@@ -37,34 +37,53 @@ const App = () => {
       number: newNumber
     }
 
-    if (persons.some(person => person.name == personObject.name)) {
-      alert(`${newName} is already in the phonebook`)
+    const person = persons.find(p => p.name == personObject.name)
+
+    if (typeof person === 'undefined') {
+      personService
+        .create(personObject)
+          .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
       return
     }
 
-    personService
-      .create(personObject)
-        .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+    const changedPerson = {...person, number: newNumber}
+
+    updatePerson(changedPerson)
+  }
+
+  const updatePerson = person => {
+    if (confirm(`${person.name} is already in the phonebook, replace the old number with the new one?`)) {
+      personService
+        .update(person.id, person)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+              alert(`Person ${person.name} has already been deleted`)
+              setPersons(persons.filter(p => p.id !== id))
+            }
+          )
+    }
   }
 
   const deletePerson = (id, name) => {
-    console.log(`pressed button to delete ${id}`)
-
     if (confirm(`Delete ${name}?`)) {
       personService
         .erase(id)
           .then(returnedData => {
-            console.log(returnedData)
            setPersons(persons.filter(p => p.id !== id))
         })
         .catch(error => {
           alert(
             `the person ${name} was already deleted from the server`
           )
+          setPersons(persons.filter(p => p.id !== id))
         })
     }
   }
